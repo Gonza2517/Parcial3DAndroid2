@@ -27,7 +27,7 @@ public class GyroCarController : MonoBehaviour
         Vector3 gyroInput = Input.gyro.rotationRateUnbiased;  
         float steering = Mathf.Lerp(0, -gyroInput.y * sensitivity, Time.deltaTime * 5);
         transform.Rotate(Vector3.up, steering);
-        float clampedGyroX = Mathf.Clamp(gyroInput.y, GyroMin, GyroMax); // Limites Gyroscopio
+        float clampedGyroY = Mathf.Clamp(gyroInput.y, GyroMin, GyroMax); // Limites Gyroscopio
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0); // Detectar toques
