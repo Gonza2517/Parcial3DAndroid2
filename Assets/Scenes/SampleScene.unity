@@ -21690,7 +21690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26eef75bdb2063b45b0abfab9889c28b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 40
+  sensitivity: 60
   forwardSpeed: 35
   accelerationForce: 20
   reverseSpeed: 20
@@ -21711,7 +21711,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687059358}
   serializedVersion: 4
-  m_Mass: 5
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
