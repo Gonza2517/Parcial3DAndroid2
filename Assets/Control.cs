@@ -25,12 +25,11 @@ public class GyroCarController : MonoBehaviour
     void Update()
     {
         Vector3 gyroInput = Input.gyro.rotationRateUnbiased;
-        // Clamp the Y-axis rotation
-        gyroInput.z = Mathf.Clamp(gyroInput.z, GyroMin, GyroMax);
-
-        float steering = Mathf.Lerp(0, -gyroInput.z * sensitivity, Time.deltaTime * 5);
+        // Clamp the Z-axis rotation
+        float clampedGyroZ = Mathf.Clamp(gyroInput.z, GyroMin, GyroMax);
+        // Calculate the target rotation angle increment
+        float steering = -clampedGyroZ * sensitivity * Time.deltaTime * 100f; // Modificador para eje Z
         transform.Rotate(Vector3.up, steering);
-        float clampedGyroY = Mathf.Clamp(gyroInput.z, GyroMin, GyroMax); // Limites Gyroscopio
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0); // Detectar toques
@@ -65,10 +64,5 @@ public class GyroCarController : MonoBehaviour
             float remainingForce = Mathf.Clamp(reverseSpeed - currentSpeed, 0, accelerationForce);
             rb.AddForce(-transform.forward * remainingForce * Time.deltaTime, ForceMode.VelocityChange); // Retroceder
         }
-    }
-
-    void ResetGyroRotation()
-    {
-        transform.rotation = initialRotation;
     }
 }
