@@ -1,44 +1,58 @@
 using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 
 public class GyroCarController : MonoBehaviour
 {
-    public float sensitivity = 1.0f, forwardSpeed = 100.0f, accelerationForce = 50.0f, reverseSpeed = 50.0f, holdThreshold = 0.5f, GyroMin = -1.0f, GyroMax = 1.0f;
+    public float sensitivity = 0.5f; 
+    public float forwardSpeed = 100.0f;
+    public float accelerationForce = 50.0f;
+    public float reverseSpeed = 50.0f;
+    public float holdThreshold = 0.5f;
+    public float doubleTapTime = 0.3f;
+    public float steeringSmoothTime = 0.2f; 
+    public Transform cameraTransform; 
+
     private Rigidbody rb;
     private Quaternion initialRotation;
     private bool isForward = true;
-    private float doubleTapTime = 0.3f, lastTapTime, tapStartTime;
+    private float lastTapTime;
+    private float tapStartTime;
+    private float targetAngle;
+    private float currentAngle;
+    private float angleVelocity;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();  // Rigidbody
+        rb = GetComponent<Rigidbody>();
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         rb.drag = 0.5f;
         rb.angularDrag = 0.5f;
 
         Input.gyro.enabled = true;
-        initialRotation = Quaternion.Euler(90f, 0f, 0f);  // Establecer Gyro en 0
+        initialRotation = Quaternion.Euler(90f, 0f, 0f);
     }
 
     void Update()
     {
         Vector3 gyroInput = Input.gyro.rotationRateUnbiased;
-        // Clamp the Z-axis rotation
-        float clampedGyroZ = Mathf.Clamp(gyroInput.z, GyroMin, GyroMax);
-        // Calculate the target rotation angle increment
-        float steering = -clampedGyroZ * sensitivity * Time.deltaTime * 100f; // Modificador para eje Z
-        transform.Rotate(Vector3.up, steering);
+
+        float rotationZ = gyroInput.z * sensitivity;
+
+        targetAngle += rotationZ;
+        currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref angleVelocity, steeringSmoothTime);
+    
+        Quaternion cameraRotation = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0);
+        transform.rotation = cameraRotation * Quaternion.Euler(0, currentAngle, 0);
+
         if (Input.touchCount > 0)
         {
-            Touch touch = Input.GetTouch(0); // Detectar toques
+            Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began)
             {
                 tapStartTime = Time.time;
                 if (Time.time - lastTapTime < doubleTapTime)
                 {
-                    isForward = !isForward; // Cambiar sentido con double tap
+                    isForward = !isForward;
                 }
                 lastTapTime = Time.time;
             }
@@ -47,7 +61,7 @@ public class GyroCarController : MonoBehaviour
                 if (Time.time - tapStartTime > holdThreshold)
                 {
                     rb.velocity = Vector3.zero;
-                    rb.angularVelocity = Vector3.zero; // Frenar al holdear
+                    rb.angularVelocity = Vector3.zero;
                 }
             }
         }
@@ -56,13 +70,18 @@ public class GyroCarController : MonoBehaviour
         {
             float currentSpeed = Vector3.Dot(rb.velocity, transform.forward);
             float remainingForce = Mathf.Clamp(forwardSpeed - currentSpeed, 0, accelerationForce);
-            rb.AddForce(transform.forward * remainingForce * Time.deltaTime, ForceMode.VelocityChange); // Acelerar
+            rb.AddForce(transform.forward * remainingForce * Time.deltaTime, ForceMode.VelocityChange);
         }
         else
         {
             float currentSpeed = Vector3.Dot(rb.velocity, -transform.forward);
             float remainingForce = Mathf.Clamp(reverseSpeed - currentSpeed, 0, accelerationForce);
-            rb.AddForce(-transform.forward * remainingForce * Time.deltaTime, ForceMode.VelocityChange); // Retroceder
+            rb.AddForce(-transform.forward * remainingForce * Time.deltaTime, ForceMode.VelocityChange);
         }
+    }
+
+    void ResetGyroRotation()
+    {
+        transform.rotation = initialRotation;
     }
 }

@@ -5,10 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    private string menuScene = "Menu";
+    private string gameSceneSingleTap = "PistaCarrera";
+    private string gameSceneDoubleTap = "PistaCarrera2";
+
+    private bool singleTapDetected = false;
+
     void Start()
     {
-        SceneManager.UnloadSceneAsync("PistaCarrera");
-        SceneManager.LoadScene("Menu", LoadSceneMode.Single);
+
     }
 
     // Update is called once per frame
@@ -16,18 +21,44 @@ public class MainMenu : MonoBehaviour
     {
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            ChangeScene();
+            if (!singleTapDetected)
+            {
+                singleTapDetected = true;
+                Invoke("LoadSingleTapScene", 0.5f);
+            }
+            else
+            {
+                LoadDoubleTapScene();
+            }
+        }
+        if (singleTapDetected)
+        {
+            Invoke("ResetSingleTapDetection", 0.5f);
         }
     }
 
-    void ChangeScene()
+    void LoadSingleTapScene()
     {
-        Scene currentLoadedScene = SceneManager.GetSceneByName("Menu");
+        SceneManager.LoadSceneAsync(gameSceneSingleTap, LoadSceneMode.Single);
+        Invoke("UnloadMenuScene", 0.5f);
+    }
 
-        if (currentLoadedScene.isLoaded)
+    void LoadDoubleTapScene()
+    {
+        SceneManager.LoadSceneAsync(gameSceneDoubleTap, LoadSceneMode.Single);
+        Invoke("UnloadMenuScene", 0.5f);
+    }
+
+    void UnloadMenuScene()
+    {
+        if (SceneManager.GetSceneByName(menuScene).isLoaded)
         {
-            SceneManager.LoadScene("PistaCarrera", LoadSceneMode.Single);
-            SceneManager.UnloadSceneAsync("Menu");
+            SceneManager.UnloadSceneAsync(menuScene);
         }
+    }
+
+    void ResetSingleTapDetection()
+    {
+        singleTapDetected = false;
     }
 }
