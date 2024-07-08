@@ -34,14 +34,14 @@ public class MenuAuto1 : MonoBehaviour
     void LoadSingleTapScene()
     {
         SceneManager.LoadSceneAsync(gameSceneSingleTap, LoadSceneMode.Single);
-        Debug.Log("Loading single tap scene: " + gameSceneSingleTap);
+        
         Invoke("UnloadMenuScene", 0.5f);
     }
 
     void LoadDoubleTapScene()
     {
         SceneManager.LoadSceneAsync(gameSceneDoubleTap, LoadSceneMode.Single);
-        Debug.Log("Loading double tap scene: " + gameSceneDoubleTap);
+       
         Invoke("UnloadMenuScene", 0.5f);
     }
 
@@ -51,17 +51,14 @@ public class MenuAuto1 : MonoBehaviour
         if (menuSceneObject.IsValid() && menuSceneObject.isLoaded)
         {
             SceneManager.UnloadSceneAsync(menuScene);
-            Debug.Log("Unloading menu scene: " + menuScene);
+           
         }
-        else
-        {
-            Debug.LogWarning("Menu scene (" + menuScene + ") not found or already unloaded.");
-        }
+
     }
 
     void ResetSingleTapDetection()
     {
         singleTapDetected = false;
-        Debug.Log("Resetting single tap detection.");
+        
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ScoreboardManager : MonoBehaviour
 {
-    public Text scoreboardText; // Assign this in the Unity Inspector
+    public Text scoreboardText; 
     private List<float> times = new List<float>();
 
     void Start()
@@ -15,14 +15,14 @@ public class ScoreboardManager : MonoBehaviour
 
     public void AddTime(float time)
     {
-        Debug.Log("Adding time: " + time); // Debug log to verify AddTime is called
+       
         times.Add(time);
         UpdateScoreboard();
     }
 
     void UpdateScoreboard()
     {
-        Debug.Log("Updating scoreboard with " + times.Count + " times"); // Debug log to verify UpdateScoreboard is called
+        
         if (scoreboardText != null)
         {
             string newText = "";
@@ -31,14 +31,8 @@ public class ScoreboardManager : MonoBehaviour
                 newText += "Lap " + (i + 1) + ": " + FormatTime(times[i]) + "\n";
             }
             scoreboardText.text = newText;
-            Debug.Log("Scoreboard text updated to: " + newText); // Log the updated text
 
-            // Force the Canvas to update
             Canvas.ForceUpdateCanvases();
-        }
-        else
-        {
-            Debug.LogError("scoreboardText is not assigned!"); // Log an error if the Text component is not assigned
         }
     }
 
