@@ -12,8 +12,17 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 075508c235b6b5e42a7df6fe9a689468
   - enabled: 1
+    path: Assets/MenuAutoNivel1.unity
+    guid: 133d91c7d9040f94ca1ff77332cc3cf5
+  - enabled: 1
     path: Assets/Scenes/PistaCarrera.unity
     guid: c3396ca289b579e4096def9cb5ef513a
+  - enabled: 1
+    path: Assets/Scenes/PistaCarrera2.unity
+    guid: f9af51cf1ba6a084e82852e136c9cd24
+  - enabled: 1
+    path: Assets/PistaCarreraNivel1Audi.unity
+    guid: cd8cd736e3f1f624bb122631a0b80ea2
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 0264387e153e589408e75d62a6b121d1,
       type: 2}

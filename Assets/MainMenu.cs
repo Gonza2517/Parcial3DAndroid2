@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     private string menuScene = "Menu";
-    private string gameSceneSingleTap = "PistaCarrera";
-    private string gameSceneDoubleTap = "PistaCarrera2";
+    private string gameSceneSingleTap = "MenuAutoNivel1";
+    private string gameSceneDoubleTap = "MenuAutoNivel2";
 
     private bool singleTapDetected = false;
 
